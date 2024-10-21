@@ -3,7 +3,7 @@ import { getProductBySlug } from "@/wix-api/products"
 import { notFound } from "next/navigation"
 import ProductDetails from "./ProductDetails"
 import { Metadata } from "next"
-import { describe } from "node:test"
+import { delay } from "@/lib/utils"
 
 interface PageProps {
     params:{slug:string}
@@ -33,12 +33,11 @@ export async function generateMetada({params:{slug}}:PageProps):Promise<Metadata
 }
 
 export default async function Page({params:{slug}}:PageProps){
+    await delay(3000)
     const product = await getProductBySlug(slug)
 
     if(!product?._id) notFound()
-
-
-        return (<main className="max-w-7xl mx-auto space-y-10 px-5 py-10">
+       return (<main className="max-w-7xl mx-auto space-y-10 px-5 py-10">
             <ProductDetails product={product} />
         </main>)
 }
