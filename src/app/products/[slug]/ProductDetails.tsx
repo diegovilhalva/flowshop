@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { InfoIcon } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import AddToCartButton from "@/components/AddToCartButton"
 
 interface ProductDetailsProps {
     product: products.Product
@@ -70,10 +71,10 @@ function ProductDetails({ product }: ProductDetailsProps) {
                     <div dangerouslySetInnerHTML={{ __html: product.description }} className="prose dark:prose-invert" />
                 )}
                 <ProductOptions product={product} setSelectedOptions={setSelectedOptions} selectedOptions={selectedOptions} />
-                <div>
+            
                     <div className="space-y-1.5">
                         <Label htmlFor="quantity">Quantidade</Label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2.5">
                             <Input name="quantity" type="number" value={quantity}
                                 onChange={(e) => setQuantity(Number(e.target.value))} className="w-24"
                                 disabled={!inStock} min={1} />
@@ -86,9 +87,17 @@ function ProductDetails({ product }: ProductDetailsProps) {
                             )}
                         </div>
                     </div>
+                    {inStock ? (
+                        <AddToCartButton 
+                        product={product}
+                        selectedOptions={selectedOptions}
+                        quantity={quantity} />
+                    ) :(
+                        "Produto não disponível"
+                    )}
                     {!!product.additionalInfoSections?.length &&(
                         <div className="space-y-1.5 text-sm text-muted-foreground">
-                            <span className="flex items-center gap-2 my-1">
+                            <span className="flex items-center gap-2">
                                 <InfoIcon className="size-5" />
                                 <span>Informações do produto</span>
                             </span>
@@ -108,7 +117,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
                             </Accordion>
                         </div>
                     )}
-                </div>
+                
             </div>
         </div>
     )
