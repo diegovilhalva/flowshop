@@ -4,6 +4,7 @@ import Link from "next/link"
 import logo from "@/assets/logo.png"
 import { getCart } from "@/wix-api/cart"
 import { getWixServerClient } from "@/lib/wix-client.server"
+import ShoppingCartButton from "./ShoppingCartButton"
 
 
 
@@ -22,7 +23,7 @@ export default async function Navbar() {
                 <Image src={logo} alt="Flow Shop logo" width={40} height={40} />
                 <span className="text-xl font-bold">Flow Shop</span>
                 </Link>
-                {totalQuantity !== 1 ?`${totalQuantity} items`: `${totalQuantity} item`} 
+                <ShoppingCartButton initialData={cart} />
                 
             </div>
 

@@ -3,6 +3,8 @@ import { Lora } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import ReactQueryProvider from "./ReactQueryProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const lora = Lora({ subsets: ["latin"] });
 
@@ -22,9 +24,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={lora.className}>
-        <Navbar />
-        {children}
-        <Footer/>
+        <ReactQueryProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </ReactQueryProvider>
+        <Toaster />
       </body>
     </html>
   );
