@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { InfoIcon } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import AddToCartButton from "@/components/AddToCartButton"
+import BackInStockNotificationButton from "@/components/BackInStockNotifications"
 
 interface ProductDetailsProps {
     product: products.Product
@@ -93,7 +94,8 @@ function ProductDetails({ product }: ProductDetailsProps) {
                         selectedOptions={selectedOptions}
                         quantity={quantity} />
                     ) :(
-                        "Produto não disponível"
+                       
+                        <BackInStockNotificationButton product={product} selectedOptions={selectedOptions} className="w-full" />
                     )}
                     {!!product.additionalInfoSections?.length &&(
                         <div className="space-y-1.5 text-sm text-muted-foreground">
