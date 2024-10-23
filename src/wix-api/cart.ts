@@ -3,8 +3,8 @@ import { findVariant } from "@/lib/utils"
 import { getWixClient, WixClient } from "@/lib/wix-client.base"
 import { products } from "@wix/stores"
 
-export async function getCart(wixClient:WixClient) {
-    
+export async function getCart(wixClient: WixClient) {
+
     try {
         return await wixClient.currentCart.getCurrentCart()
     } catch (error) {
@@ -22,22 +22,41 @@ export interface AddToCartValues {
     quantity: number
 }
 
-export async function addToCart(wixClient:WixClient,{ product, quantity, selectedOptions }: AddToCartValues) {
-    
-    const selectdVariant = findVariant(product,selectedOptions)
+export async function addToCart(wixClient: WixClient, { product, quantity, selectedOptions }: AddToCartValues) {
+
+    const selectdVariant = findVariant(product, selectedOptions)
 
     return wixClient.currentCart.addToCurrentCart({
-        lineItems:[
+        lineItems: [
             {
-                catalogReference:{
+                catalogReference: {
                     appId: WIX_STORES_APP_ID,
-                    catalogItemId:product._id,
-                    options:selectdVariant ? {
+                    catalogItemId: product._id,
+                    options: selectdVariant ? {
                         variantId: selectdVariant._id
-                    }: {options:selectedOptions}
+                    } : { options: selectedOptions }
                 },
                 quantity
             }
         ]
     })
 }
+
+
+export interface UpdateCartItemQuantityValues {
+    productId: string
+    newQuantity: number
+}
+
+export async function updateCartItemQuantity(wixClient: WixClient, { productId, newQuantity }: UpdateCartItemQuantityValues) {
+    return wixClient.currentCart.updateCurrentCartLineItemQuantity([
+        {
+            _id:productId,
+            quantity:newQuantity
+        }
+    ])
+}
+
+export async function removeCartItem(wixClient: WixClient, productId: string) {
+    return wixClient.currentCart.removeLineItemsFromCurrentCart([productId]);
+  }
