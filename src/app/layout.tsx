@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import ReactQueryProvider from "./ReactQueryProvider";
 import { Toaster } from "@/components/ui/toaster";
-
+import { ThemeProvider } from "next-themes"
 const lora = Lora({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,12 +24,19 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={lora.className}>
-        <ReactQueryProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </ReactQueryProvider>
-        <Toaster />
+        <ThemeProvider 
+        attribute="class"
+        defaultTheme="system"
+        enableSystem={true}
+        disableTransitionOnChange 
+        >
+          <ReactQueryProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </ReactQueryProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
