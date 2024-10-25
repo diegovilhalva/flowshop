@@ -43,3 +43,6 @@ export function checkInStock(
         product.stock?.inventoryStatus ===
           products.InventoryStatus.PARTIALLY_OUT_OF_STOCK;
 }
+
+
+
