@@ -1,3 +1,4 @@
+import PaginationBar from "@/components/PaginationBar";
 import Product from "@/components/Product";
 import { Skeleton } from "@/components/ui/skeleton";
 import { delay } from "@/lib/utils";
@@ -9,11 +10,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 interface PageProps {
-  params: { slug: string };
+  params: { slug: string }
+  seachParams: { page?: string }
 }
 
 export async function generateMetadata({
   params: { slug },
+  seachParams: { page }
 }: PageProps): Promise<Metadata> {
   const collection = await getCollectionBySlug(getWixServerClient(), slug);
 
@@ -30,16 +33,16 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { slug } }: PageProps) {
+export default async function Page({ params: { slug }, seachParams: { page = "1" } }: PageProps) {
   const collection = await getCollectionBySlug(getWixServerClient(), slug);
 
   if (!collection?._id) notFound();
 
   return (
     <div className="space-y-5">
-      <h2 className="text-2xl font-bold">Products</h2>
-      <Suspense fallback={<LoadingSkeleton />}>
-        <Products collectionId={collection._id} />
+      <h2 className="text-2xl font-bold">Produtos</h2>
+      <Suspense fallback={<LoadingSkeleton />} key={page}>
+        <Products collectionId={collection._id} page={parseInt(page)} />
       </Suspense>
     </div>
   );
@@ -47,22 +50,32 @@ export default async function Page({ params: { slug } }: PageProps) {
 
 interface ProductsProps {
   collectionId: string;
+  page: number
 }
 
-async function Products({ collectionId }: ProductsProps) {
+async function Products({ collectionId, page }: ProductsProps) {
   await delay(2000);
 
+
+  const pageSize = 8
   const collectionProducts = await queryProducts(getWixServerClient(), {
     collectionIds: collectionId,
+    limit: pageSize,
+    skip: (page - 1) * pageSize
   });
 
-  if (!collectionProducts.length) notFound();
+  if (!collectionProducts.length) notFound()
+
+  if (page > (collectionProducts.totalPages || 1)) notFound()
 
   return (
-    <div className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
-      {collectionProducts.items.map((product) => (
-        <Product key={product._id} product={product} />
-      ))}
+    <div className="space-y-10">
+      <div className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
+        {collectionProducts.items.map((product) => (
+          <Product key={product._id} product={product} />
+        ))}
+      </div>
+      <PaginationBar currentPage={page} totalPages={collectionProducts.totalPages || 1} />
     </div>
   );
 }
