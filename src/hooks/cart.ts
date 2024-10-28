@@ -1,7 +1,7 @@
 "use client"
 
 import { wixBrowserClient } from "@/lib/wix-client.browser";
-import { getCart, addToCart, AddToCartValues, UpdateCartItemQuantityValues, updateCartItemQuantity, removeCartItem } from "@/wix-api/cart";
+import { getCart, addToCart, AddToCartValues, UpdateCartItemQuantityValues, updateCartItemQuantity, removeCartItem,clearCart } from "@/wix-api/cart";
 import { MutationKey, QueryClient, QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { currentCart } from "@wix/ecom";
 import { useToast } from "./use-toast";
@@ -104,4 +104,18 @@ export function useRemoveCartItem() {
             queryClient.invalidateQueries({queryKey})
         }
     })
+}
+
+
+export function useClearCart() {
+    const queryClient = useQueryClient();
+  
+    return useMutation({
+      mutationFn: () => clearCart(wixBrowserClient),
+      onSuccess() {
+        queryClient.setQueryData(queryKey, null);
+        queryClient.invalidateQueries({ queryKey });
+      },
+      retry: 3,
+    });
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import CheckoutButton from "@/components/CheckoutButton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import WixImage from "@/components/WixImage";
@@ -89,9 +90,8 @@ export default function ShoppingCartButton({
                                 Frete será calculado no pagamento
                             </p>
                         </div>
-                        <Button size="lg" disabled={!totalQuantity || cartQuery.isFetching}>
-                            Avançar
-                        </Button>
+                        <CheckoutButton size="lg" disabled={!totalQuantity || cartQuery.isFetching}/>
+                          
                     </div>
                 </SheetContent>
             </Sheet>
