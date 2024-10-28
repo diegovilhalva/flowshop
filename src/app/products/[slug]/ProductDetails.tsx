@@ -13,6 +13,7 @@ import { InfoIcon } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import AddToCartButton from "@/components/AddToCartButton"
 import BackInStockNotificationButton from "@/components/BackInStockNotifications"
+import BuyNowButton from "@/components/BuyNow"
 
 interface ProductDetailsProps {
     product: products.Product
@@ -89,10 +90,23 @@ function ProductDetails({ product }: ProductDetailsProps) {
                         </div>
                     </div>
                     {inStock ? (
-                        <AddToCartButton 
-                        product={product}
-                        selectedOptions={selectedOptions}
-                        quantity={quantity} />
+                       <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full">
+                       <AddToCartButton
+                         product={product}
+                         selectedOptions={selectedOptions}
+                         quantity={quantity}
+                         disabled={availableQuantityExceeded || quantity < 1}
+                         className="w-full sm:w-auto"
+                       />
+                       <BuyNowButton
+                         product={product}
+                         selectedOptions={selectedOptions}
+                         quantity={quantity}
+                         disabled={availableQuantityExceeded || quantity < 1}
+                         className="w-full sm:w-auto"
+                       />
+                     </div>
+                     
                     ) :(
                        
                         <BackInStockNotificationButton product={product} selectedOptions={selectedOptions} className="w-full" />
