@@ -8,6 +8,11 @@ import { getWixServerClient } from "@/lib/wix-client.server"
 import { Suspense } from "react"
 import Product from "@/components/Product"
 import { Skeleton } from "@/components/ui/skeleton"
+import CreateProductReviewButton from "@/components/reviews/CreateProductReviewButton"
+import ProductReviews, { ProductReviewsLoadingSkeleton } from "./PoductReviews"
+import { products } from "@wix/stores"
+import { getLoggedInMember } from "@/wix-api/members"
+import { getProductReviews } from "@/wix-api/reviews"
 
 interface PageProps {
     params: { slug: string }
@@ -47,6 +52,15 @@ export default async function Page({ params: { slug } }: PageProps) {
         <Suspense fallback={<RelatedProductsLoadingSkeleton/>}>
             <RelatedProduts productId={product._id} />
         </Suspense>
+        <hr />
+        <div className="space-y-5">
+            <h2 className="text-2xl fonrt">
+                Avaliações dos clientes
+            </h2>
+            <Suspense fallback={<ProductReviewsLoadingSkeleton/>}>
+                <ProductReviewsSection product={product} />
+            </Suspense>
+        </div>
     </main>)
 }
 
@@ -85,3 +99,37 @@ function RelatedProductsLoadingSkeleton() {
       </div>
     );
 }
+
+interface ProductReviewsSectionProps {
+    product: products.Product;
+  }
+  
+  async function ProductReviewsSection({ product }: ProductReviewsSectionProps) {
+    if (!product._id) return null;
+  
+    const wixClient = getWixServerClient();
+  
+    const loggedInMember = await getLoggedInMember(wixClient);
+  
+    const existingReview = loggedInMember?.contactId
+      ? (
+          await getProductReviews(wixClient, {
+            productId: product._id,
+            contactId: loggedInMember.contactId,
+          })
+        ).items[0]
+      : null;
+  
+    await delay(5000);
+  
+    return (
+      <div className="space-y-5">
+        <CreateProductReviewButton
+          product={product}
+          loggedInMember={loggedInMember}
+          hasExistingReview={!!existingReview}
+        />
+        <ProductReviews product={product} />
+      </div>
+    );
+  }
