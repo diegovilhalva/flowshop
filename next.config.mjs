@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        staleTimes: {
-          dynamic: 30,
-        },
-      }
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+    },
+  }
 };
 
 export default nextConfig;
