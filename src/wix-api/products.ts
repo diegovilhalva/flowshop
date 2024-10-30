@@ -54,6 +54,11 @@ export async function queryProducts(wixClient: WixClient, { q, collectionIds, so
   return query.find()
 }
 
+export async function getProductById(wixClient: WixClient, productId: string) {
+  const result = await wixClient.products.getProduct(productId);
+  return result.product;
+}
+
 export const getProductBySlug = cache(async (wixClient: WixClient, slug: string) => {
 
 
@@ -114,3 +119,4 @@ export async function getRelatedProducts(
 
   return productsResult.items;
 }
+

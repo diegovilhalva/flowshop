@@ -3,7 +3,6 @@ import { getProductBySlug, getRelatedProducts } from "@/wix-api/products"
 import { notFound } from "next/navigation"
 import ProductDetails from "./ProductDetails"
 import { Metadata } from "next"
-import { delay } from "@/lib/utils"
 import { getWixServerClient } from "@/lib/wix-client.server"
 import { Suspense } from "react"
 import Product from "@/components/Product"
@@ -42,7 +41,7 @@ export async function generateMetada({ params: { slug } }: PageProps): Promise<M
 }
 
 export default async function Page({ params: { slug } }: PageProps) {
-    await delay(3000)
+    
     const product = await getProductBySlug(getWixServerClient(), slug)
 
     if (!product?._id) notFound()
@@ -69,7 +68,7 @@ interface RelatedProdutsProps {
 }
 
 async function RelatedProduts({ productId }: RelatedProdutsProps) {
-    await delay(2000);
+    
 
     const relatedProducts = await getRelatedProducts(
       getWixServerClient(),
@@ -120,7 +119,7 @@ interface ProductReviewsSectionProps {
         ).items[0]
       : null;
   
-    await delay(5000);
+    
   
     return (
       <div className="space-y-5">

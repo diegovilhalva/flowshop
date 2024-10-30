@@ -2,7 +2,7 @@ import banner from "@/assets/banner.jpg"
 import Product from "@/components/Product";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { delay } from "@/lib/utils";
+
 import { getWixServerClient } from "@/lib/wix-client.server";
 import { getCollectionBySlug } from "@/wix-api/collections";
 import { queryProducts } from "@/wix-api/products";
@@ -38,7 +38,7 @@ export default function Home() {
 
 
 async function FeaturedProducts() {
-  await delay(1000)
+ 
 
   const wixClient = getWixServerClient()
 
