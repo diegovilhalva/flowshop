@@ -9,13 +9,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 interface PageProps {
-  params: { slug: string }
-  seachParams: { page?: string }
+  params: { slug: string };
+  searchParams: { page?: string };
 }
 
 export async function generateMetadata({
   params: { slug },
-  seachParams: { page }
 }: PageProps): Promise<Metadata> {
   const collection = await getCollectionBySlug(getWixServerClient(), slug);
 
@@ -32,7 +31,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { slug }, seachParams: { page = "1" } }: PageProps) {
+export default async function Page({
+  params: { slug },
+  searchParams: { page = "1" },
+}: PageProps) {
   const collection = await getCollectionBySlug(getWixServerClient(), slug);
 
   if (!collection?._id) notFound();
@@ -49,23 +51,21 @@ export default async function Page({ params: { slug }, seachParams: { page = "1"
 
 interface ProductsProps {
   collectionId: string;
-  page: number
+  page: number;
 }
 
 async function Products({ collectionId, page }: ProductsProps) {
-  
+  const pageSize = 8;
 
-
-  const pageSize = 8
   const collectionProducts = await queryProducts(getWixServerClient(), {
     collectionIds: collectionId,
     limit: pageSize,
-    skip: (page - 1) * pageSize
+    skip: (page - 1) * pageSize,
   });
 
-  if (!collectionProducts.length) notFound()
+  if (!collectionProducts.length) notFound();
 
-  if (page > (collectionProducts.totalPages || 1)) notFound()
+  if (page > (collectionProducts.totalPages || 1)) notFound();
 
   return (
     <div className="space-y-10">
@@ -74,7 +74,10 @@ async function Products({ collectionId, page }: ProductsProps) {
           <Product key={product._id} product={product} />
         ))}
       </div>
-      <PaginationBar currentPage={page} totalPages={collectionProducts.totalPages || 1} />
+      <PaginationBar
+        currentPage={page}
+        totalPages={collectionProducts.totalPages || 1}
+      />
     </div>
   );
 }
