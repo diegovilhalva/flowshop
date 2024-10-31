@@ -70,6 +70,3 @@ Flow Shop integrates with the **Wix Stores API** to dynamically fetch product co
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE)  file for more details.
 
---- 
-
-This `README` should help guide new developers and contributors on setting up and working with the project.
