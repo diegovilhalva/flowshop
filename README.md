@@ -35,7 +35,7 @@ Flow Shop is built to be a scalable and efficient e-commerce application that ut
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/flowshop.git
+   git clone https://github.com/diegovilhalva/flowshop.git
    cd flowshop
    ```
 
